@@ -1,0 +1,122 @@
+2025-07-29 01:03:22:Debug: Caller initialized
+2025-07-29 01:03:22:Debug: Graph initialized
+2025-07-29 01:03:22:Debug: Follower Controller initialized
+2025-07-29 01:03:22:Engine initialized successfully
+2025-07-29 01:03:23:Debug: Follower initialized
+2025-07-29 01:03:23:Debug: Registered follower in caller: cfa98be0-7452-49dd-b769-4706daa7228b at 127.0.0.1:42424
+2025-07-29 01:03:23:Debug: Follower cfa98be0-7452-49dd-b769-4706daa7228b added successfully
+2025-07-29 01:03:23:Debug: Follower init successfully, UUID is: cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:23:Debug: Plugins added to follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:23:Debug: Follower add plugin successfully, UUID is: cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:23:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Successfully connected to leader
+2025-07-29 01:03:23:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Ubik-Follower running now, listening on 42424
+2025-07-29 01:03:23:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Heartbeat sender initialized
+2025-07-29 01:03:23:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Successfully post the plugin list to leader
+2025-07-29 01:03:23:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Ubik-Follower is starting...
+2025-07-29 01:03:27:Debug: Adding runtime node 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/?id=1&plugin_name=AddNum&node_name=startNode
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: mounting plugin AddNum
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: New runtime node startNode created, id: 1
+2025-07-29 01:03:27:Debug: Runtime node 1 added successfully for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Adding runtime node 2 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/?id=2&plugin_name=AddNum&node_name=selfIncreasingNode
+2025-07-29 01:03:27:Debug: Runtime node 2 added successfully for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Adding runtime node 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/?id=3&plugin_name=AddNum&node_name=sumNode
+2025-07-29 01:03:27:Debug: Runtime node 3 added successfully for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Adding runtime node 4 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/?id=4&plugin_name=AddNum&node_name=selfIncreasingNode
+2025-07-29 01:03:27:Debug: Runtime node 4 added successfully for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Updating edge from producer 1 to consumer 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=1&consumer_id=3&producer_port_name=num_a&consumer_port_name=num_a
+2025-07-29 01:03:27:Debug: Edge updated successfully from producer 1 to consumer 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: plugin AddNum already mounted
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: New runtime node selfIncreasingNode created, id: 2
+2025-07-29 01:03:27:Debug: Updating edge from producer 1 to consumer 2 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=1&consumer_id=2&producer_port_name=num_a&consumer_port_name=input
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: plugin AddNum already mounted
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: New runtime node sumNode created, id: 3
+2025-07-29 01:03:27:Debug: Edge updated successfully from producer 1 to consumer 2 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Updating edge from producer 2 to consumer 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=2&consumer_id=3&producer_port_name=num_b&consumer_port_name=num_b
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge updated between runtime node 1 and 3
+2025-07-29 01:03:27:Debug: Edge updated successfully from producer 2 to consumer 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: New runtime node selfIncreasingNode created, id: 4
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: plugin AddNum already mounted
+2025-07-29 01:03:27:Debug: Updating edge from producer 1 to consumer 4 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=1&consumer_id=4&producer_port_name=cycle_num&consumer_port_name=input
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge updated between runtime node 1 and 2
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge updated between runtime node 2 and 3
+2025-07-29 01:03:27:Debug: Edge updated successfully from producer 1 to consumer 4 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Updating edge from producer 4 to consumer 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge updated between runtime node 1 and 4
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=4&consumer_id=1&producer_port_name=num_b&consumer_port_name=current_cycle_num
+2025-07-29 01:03:27:Debug: Edge updated successfully from producer 4 to consumer 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Updating edge from producer 3 to consumer 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge updated between runtime node 4 and 1
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=3&consumer_id=1&producer_port_name=sum&consumer_port_name=num_a
+2025-07-29 01:03:27:Debug: Edge updated successfully from producer 3 to consumer 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting edge from producer 1 to consumer 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge updated between runtime node 3 and 1
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=1&consumer_id=3&producer_port_name=num_a&consumer_port_name=num_a
+2025-07-29 01:03:27:Debug: Edge deleted successfully from producer 1 to consumer 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting edge from producer 1 to consumer 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=1&consumer_id=3&producer_port_name=num_a&consumer_port_name=num_a
+2025-07-29 01:03:27:Debug: Edge deleted successfully from producer 1 to consumer 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting edge from producer 1 to consumer 2 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=1&consumer_id=2&producer_port_name=num_a&consumer_port_name=input
+2025-07-29 01:03:27:Debug: Edge deleted successfully from producer 1 to consumer 2 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting edge from producer 1 to consumer 2 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=1&consumer_id=2&producer_port_name=num_a&consumer_port_name=input
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge deleted between runtime node 1 and 3
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge deleted between runtime node 1 and 2
+2025-07-29 01:03:27:Debug: Edge deleted successfully from producer 1 to consumer 2 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting edge from producer 1 to consumer 4 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=1&consumer_id=4&producer_port_name=cycle_num&consumer_port_name=input
+2025-07-29 01:03:27:Debug: Edge deleted successfully from producer 1 to consumer 4 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge deleted between runtime node 1 and 3
+2025-07-29 01:03:27:Debug: Deleting edge from producer 1 to consumer 4 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=1&consumer_id=4&producer_port_name=cycle_num&consumer_port_name=input
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge deleted between runtime node 1 and 4
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge deleted between runtime node 1 and 2
+2025-07-29 01:03:27:Debug: Edge deleted successfully from producer 1 to consumer 4 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting edge from producer 3 to consumer 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=3&consumer_id=1&producer_port_name=sum&consumer_port_name=num_a
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge deleted between runtime node 1 and 4
+2025-07-29 01:03:27:Debug: Edge deleted successfully from producer 3 to consumer 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting edge from producer 3 to consumer 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=3&consumer_id=1&producer_port_name=sum&consumer_port_name=num_a
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge deleted between runtime node 3 and 1
+2025-07-29 01:03:27:Debug: Edge deleted successfully from producer 3 to consumer 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting edge from producer 4 to consumer 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=4&consumer_id=1&producer_port_name=num_b&consumer_port_name=current_cycle_num
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge deleted between runtime node 3 and 1
+2025-07-29 01:03:27:Debug: Edge deleted successfully from producer 4 to consumer 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting edge from producer 4 to consumer 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=4&consumer_id=1&producer_port_name=num_b&consumer_port_name=current_cycle_num
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge deleted between runtime node 4 and 1
+2025-07-29 01:03:27:Debug: Edge deleted successfully from producer 4 to consumer 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting runtime node 1 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/?id=1
+2025-07-29 01:03:27:Debug: Runtime node 1 deleted successfully for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting edge from producer 2 to consumer 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=2&consumer_id=3&producer_port_name=num_b&consumer_port_name=num_b
+2025-07-29 01:03:27:Debug: Edge deleted successfully from producer 2 to consumer 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting edge from producer 2 to consumer 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/edge?producer_id=2&consumer_id=3&producer_port_name=num_b&consumer_port_name=num_b
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Runtime node 1 deleted
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge deleted between runtime node 4 and 1
+2025-07-29 01:03:27:Debug: Edge deleted successfully from producer 2 to consumer 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting runtime node 2 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/?id=2
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge deleted between runtime node 2 and 3
+2025-07-29 01:03:27:Debug: Runtime node 2 deleted successfully for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting runtime node 3 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/?id=3
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Runtime node 2 deleted
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Edge deleted between runtime node 2 and 3
+2025-07-29 01:03:27:Debug: Runtime node 3 deleted successfully for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Deleting runtime node 4 for follower cfa98be0-7452-49dd-b769-4706daa7228b
+2025-07-29 01:03:27:Debug: Calling URL: http://127.0.0.1:42424/api/node/?id=4
+2025-07-29 01:03:27:Follower UUID: cfa98be0-7452-49dd-b769-4706daa7228b , message: Runtime node 3 deleted
+2025-07-29 01:03:27:Debug: Runtime node 4 deleted successfully for follower cfa98be0-7452-49dd-b769-4706daa7228b

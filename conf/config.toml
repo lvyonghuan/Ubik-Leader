@@ -1,0 +1,9 @@
+port="24242"
+
+[log]
+level = 5
+is_save = true
+save_path = "./logs/"
+
+[heartbeat]
+overtime = 180
