@@ -112,13 +112,14 @@ func (f Follower) DeleteRuntimeNode(id int) error {
 	return nil
 }
 
-func (f Follower) UpdateEdge(producerID, consumerID int, producerPortName, consumerPortName string) error {
+func (f Follower) UpdateEdge(producerID, consumerID int, producerPortName, consumerPortName, addr string) error {
 	f.caller.log.Debug("Updating edge from producer " + strconv.Itoa(producerID) + " to consumer " + strconv.Itoa(consumerID) + " for follower " + f.uuid)
 
 	uri := f.addr + updateEdge + "?producer_id=" + strconv.Itoa(producerID) +
 		"&consumer_id=" + strconv.Itoa(consumerID) +
 		"&producer_port_name=" + producerPortName +
-		"&consumer_port_name=" + consumerPortName
+		"&consumer_port_name=" + consumerPortName +
+		"&addr=" + addr
 
 	var response string
 	status, err := f.caller.callAndUnmarshal("PUT", uri, nil, &response)
@@ -164,6 +165,9 @@ func (f Follower) PutParams(id int, params map[string]interface{}) error {
 	uri := f.addr + putParams + "?id=" + strconv.Itoa(id)
 
 	var response string
+	//var body = make(map[string]map[string]any)
+	//body["params"] = params
+
 	status, err := f.caller.callAndUnmarshal("PUT", uri, params, &response)
 	if err != nil {
 		return err
@@ -175,5 +179,48 @@ func (f Follower) PutParams(id int, params map[string]interface{}) error {
 	}
 
 	f.caller.log.Debug("Parameters updated successfully for runtime node " + strconv.Itoa(id) + " for follower " + f.uuid)
+	return nil
+}
+
+// PreparingFollower Send a prepare request to the follower
+// When the follower response, it will unblock.
+func (f Follower) PreparingFollower() error {
+	f.caller.log.Debug("Sending prepare request to follower " + f.uuid)
+
+	uri := f.addr + prepare
+
+	var response string
+	status, err := f.caller.callAndUnmarshal("GET", uri, nil, &response)
+	if err != nil {
+		return err
+	}
+
+	f.resetFollowerHeartbeat()
+	if status != 200 {
+		return uerr.NewError(errors.New("follower prepare error, status code: " + strconv.Itoa(status) + ", response: " + response))
+	}
+
+	f.caller.log.Debug("Prepare request sent successfully to follower " + f.uuid)
+	return nil
+}
+
+// RunningFollower Send a running request to the follower
+// When the follower response, it will unblock.
+func (f Follower) RunningFollower() error {
+	f.caller.log.Debug("Sending running request to follower " + f.uuid)
+	uri := f.addr + run
+
+	var response string
+	status, err := f.caller.callAndUnmarshal("GET", uri, nil, &response)
+	if err != nil {
+		return err
+	}
+
+	f.resetFollowerHeartbeat()
+	if status != 200 {
+		return uerr.NewError(errors.New("follower running error, status code: " + strconv.Itoa(status) + ", response: " + response))
+	}
+
+	f.caller.log.Debug("Running request sent successfully to follower " + f.uuid)
 	return nil
 }

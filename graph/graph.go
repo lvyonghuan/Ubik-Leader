@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/lvyonghuan/Ubik-Util/uerr"
+	"github.com/lvyonghuan/Ubik-Util/ujson"
 	"github.com/lvyonghuan/Ubik-Util/ulog"
 	"github.com/lvyonghuan/Ubik-Util/uplugin"
 )
@@ -70,7 +71,7 @@ func (g *Graph) NewRuntimeNode(uuid, pluginName, nodeName string) (int, error) {
 	if !isExist {
 		return 0, uerr.NewError(errors.New("Plugin " + pluginName + " not exist"))
 	}
-	_, isExist = plugin.Nodes[nodeName]
+	node, isExist := plugin.Nodes[nodeName]
 	if !isExist {
 		return 0, uerr.NewError(errors.New("Node " + nodeName + " not exist in plugin" + pluginName))
 	}
@@ -90,12 +91,17 @@ func (g *Graph) NewRuntimeNode(uuid, pluginName, nodeName string) (int, error) {
 
 	g.runtimeNodes[g.currentID] = runtimeNode
 
+	// Init params key
+	for key := range node.Params {
+		// TODO: 默认初始值
+		runtimeNode.params[key] = nil // Initialize with nil
+	}
+
 	//check plugin mount status
 	if _, isExist := g.mountPlugins[pluginName]; !isExist {
 		g.mountPlugins[pluginName] = plugin
 	}
 
-	//FIXME:排查是否能正常运行
 	cFollower, err := g.caller.GetFollower(f.UUID)
 	if err != nil {
 		return 0, err
@@ -154,7 +160,6 @@ func (g *Graph) DeleteRuntimeNode(id int) error {
 	//Delete the node from the runtime nodes
 	delete(g.runtimeNodes, id)
 
-	//FIXME:排查是否能正常运行
 	cFollower, err := g.caller.GetFollower(rNode.FollowerUUID)
 	if err != nil {
 		return err
@@ -166,6 +171,8 @@ func (g *Graph) DeleteRuntimeNode(id int) error {
 }
 
 func (g *Graph) UpdateEdge(edge Edge) error {
+	edge.Addr = g.runtimeNodes[edge.ConsumerID].addr // Set the addr to the consumer node's addr
+
 	var producerNode, consumerNode RuntimeNode
 	var producerPort, consumerPort uplugin.Port
 	var isExist bool
@@ -204,12 +211,11 @@ func (g *Graph) UpdateEdge(edge Edge) error {
 	g.runtimeNodes[edge.ProducerID].OutputEdges[edge.ProducerPortName] = append(g.runtimeNodes[edge.ProducerID].OutputEdges[edge.ProducerPortName], edge)
 	g.runtimeNodes[edge.ConsumerID].inputEdges[edge.ConsumerPortName] = append(g.runtimeNodes[edge.ConsumerID].inputEdges[edge.ConsumerPortName], edge)
 
-	//FIXME:排查是否能正常运行
 	cFollower, err := g.caller.GetFollower(producerNode.FollowerUUID)
 	if err != nil {
 		return err
 	}
-	err = cFollower.UpdateEdge(edge.ProducerID, edge.ConsumerID, edge.ProducerPortName, edge.ConsumerPortName)
+	err = cFollower.UpdateEdge(edge.ProducerID, edge.ConsumerID, edge.ProducerPortName, edge.ConsumerPortName, edge.Addr)
 
 	return nil
 }
@@ -234,7 +240,6 @@ func (g *Graph) deleteEdge(edge Edge, producerNode, consumerNode RuntimeNode) er
 	for i, e := range producerNode.OutputEdges[edge.ProducerPortName] {
 		if e.ConsumerID == edge.ConsumerID && e.ConsumerPortName == edge.ConsumerPortName {
 			producerNode.OutputEdges[edge.ProducerPortName] = append(producerNode.OutputEdges[edge.ProducerPortName][:i], producerNode.OutputEdges[edge.ProducerPortName][i+1:]...)
-			//FIXME:排查是否能正常运行
 			cFollower, err := g.caller.GetFollower(producerNode.FollowerUUID)
 			if err != nil {
 				return err
@@ -255,7 +260,6 @@ func (g *Graph) deleteEdge(edge Edge, producerNode, consumerNode RuntimeNode) er
 	for i, e := range consumerNode.inputEdges[edge.ConsumerPortName] {
 		if e.ProducerID == edge.ProducerID && e.ProducerPortName == edge.ProducerPortName {
 			consumerNode.inputEdges[edge.ConsumerPortName] = append(consumerNode.inputEdges[edge.ConsumerPortName][:i], consumerNode.inputEdges[edge.ConsumerPortName][i+1:]...)
-			//FIXME:排查是否能正常运行
 			cFollower, err := g.caller.GetFollower(consumerNode.FollowerUUID)
 			if err != nil {
 				g.log.Error(err)
@@ -274,6 +278,53 @@ func (g *Graph) deleteEdge(edge Edge, producerNode, consumerNode RuntimeNode) er
 	return uerr.NewError(errors.New("consumer edge not exist"))
 }
 
+// PutParams updates the parameters of a runtime node.
+func (g *Graph) PutParams(id int, params map[string]any) error {
+	// Check if the node exists
+	rNode, isExist := g.runtimeNodes[id]
+	if !isExist {
+		return errors.New("Runtime node " + strconv.Itoa(id) + " not exist")
+	}
+
+	// Check if the params are valid
+	for key, value := range params {
+		if _, isExist := rNode.params[key]; !isExist {
+			return uerr.NewError(errors.New("Params port " + strconv.Itoa(id) + " not exist"))
+		} else {
+			// Update the param value
+			var err error
+			rNode.params[key], err = ujson.Marshal(value)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	// Update the runtime node's params
+	// Get Caller for the follower
+	cFollower, err := g.caller.GetFollower(rNode.FollowerUUID)
+	if err != nil {
+		return err
+	}
+
+	// Call the follower to update the params
+	err = cFollower.PutParams(id, params)
+	if err != nil {
+		return err
+	}
+
+	g.runtimeNodes[id] = rNode //Update the runtime node in the graph
+	g.log.Debug("Updated params for runtime node" + strconv.Itoa(id))
+	return nil
+}
+
+// CheckGraphValid checks if the graph is valid.
+// Legal definition: Two start nodes cannot appear
+// in a loop of the workflow graph unless marked as a special start node.
+// TODO: use DFS to check if the graph is valid
 func (g *Graph) CheckGraphValid() error {
+	g.log.Debug("Start checking graph validity")
+
+	g.log.Debug("Graph validity check completed.")
 	return nil
 }

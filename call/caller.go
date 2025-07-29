@@ -19,8 +19,8 @@ type Caller struct {
 }
 
 type response struct {
-	Info   []byte `json:"info"`
-	Status int    `json:"status"`
+	Info   any `json:"info"`
+	Status int `json:"status"`
 }
 
 func InitCaller(ulog ulog.Log) *Caller {
@@ -59,7 +59,16 @@ func (c *Caller) callAndUnmarshal(method, url string, body, v any) (int, error) 
 
 	// Unmarshal Info field
 	if v != nil {
-		err = ujson.Unmarshal(res.Info, v)
+		// Re-marshal the Info field to bytes
+		infoBytes, err := ujson.Marshal(res.Info)
+		if err != nil {
+			return 0, uerr.NewError(err)
+		}
+		// Unmarshal the bytes into the provided variable v
+		err = ujson.Unmarshal(infoBytes, v)
+		if err != nil {
+			return 0, uerr.NewError(err)
+		}
 	}
 
 	return res.Status, nil
@@ -68,7 +77,16 @@ func (c *Caller) callAndUnmarshal(method, url string, body, v any) (int, error) 
 func (c *Caller) newRequest(method, url string, body any) (*http.Request, error) {
 	var bodyReader = new(bytes.Buffer)
 	if body != nil {
-		bodyReader = bytes.NewBuffer(body.([]byte))
+		if b, ok := body.([]byte); ok {
+			bodyReader = bytes.NewBuffer(b)
+		} else { // Assume body is a struct or map
+			// Marshal the body to JSON
+			jsonBody, err := ujson.Marshal(body)
+			if err != nil {
+				return nil, err
+			}
+			bodyReader = bytes.NewBuffer(jsonBody)
+		}
 	}
 
 	req, err := http.NewRequest(method, url, bodyReader)
@@ -105,6 +123,7 @@ func (c *Caller) preliminaryUnmarshalResponse(resp *http.Response) (response, er
 	if err != nil {
 		return response{}, uerr.NewError(err)
 	}
+
 	if err := ujson.Unmarshal(body, &res); err != nil {
 		return response{}, err
 	}

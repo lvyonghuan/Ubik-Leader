@@ -32,3 +32,8 @@ func (engine *Engine) DeleteEdge(producerID, consumerID int, producerPortName, c
 		ConsumerPortName: consumerPortName,
 	})
 }
+
+// PutParams is used to put user parameter to the node.
+func (engine *Engine) PutParams(nodeID int, params map[string]interface{}) error {
+	return engine.graph.PutParams(nodeID, params)
+}

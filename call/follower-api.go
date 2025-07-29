@@ -12,6 +12,5 @@ const (
 	deleteRuntimeNode = apiRoot + node + "/"      //Delete a runtime node. Use delete.
 	updateEdge        = apiRoot + node + "/edge"  //Update a edge. Use put.
 	deleteEdge        = apiRoot + node + "/edge"  //Delete a edge. Use delete.
-	updateParam       = apiRoot + node + "/param" //Update a param. Use put.
 	putParams         = apiRoot + node + "/param" //Update the parameters of a node. Use put.
 )

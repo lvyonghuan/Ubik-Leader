@@ -50,6 +50,8 @@ func createRuntimeNodeForTest(uuid string, e *engine.Engine) (int, int, int, int
 		panic(err)
 	}
 
+	time.Sleep(5 * time.Second)
+
 	idB, err := e.NewRuntimeNode(uuid, "AddNum", "selfIncreasingNode")
 	if err != nil {
 		panic(err)
@@ -261,5 +263,32 @@ func TestDeleteRuntimeNodeWithEdge(t *testing.T) {
 		t.Fatalf("Failed to delete runtime node D: %v", err)
 	} else {
 		t.Logf("Runtime node D with ID %d deleted successfully", idD)
+	}
+}
+
+func TestPutParams(t *testing.T) {
+	e := initTest()
+	time.Sleep(5 * time.Second)
+
+	idA, idB, idC, idD := createRuntimeNodeForTest(testFollowerUUID, e)
+	createEdgeForTest(*e, idA, idB, idC, idD)
+
+	// Put parameters into runtime nodes
+	params := make(map[string]any)
+	params["init_num"] = 0
+	params["cycle_num"] = 10
+
+	err := e.PutParams(idA, params)
+	if err != nil {
+		t.Fatalf("Failed to put parameters into runtime node A: %v", err)
+	} else {
+		t.Logf("Parameters put successfully into runtime node A with ID: %d", idA)
+	}
+}
+
+func putParamsForTest(e engine.Engine, id int, params map[string]any) {
+	err := e.PutParams(id, params)
+	if err != nil {
+		panic(err)
 	}
 }
