@@ -34,6 +34,8 @@ type RuntimeNode struct {
 	OutputEdges  map[string][]Edge `json:"output_edges"`
 	inputEdges   map[string][]Edge
 	addr         string //Plugin's addr
+
+	metaInfo uplugin.Node // Metadata information of the node.
 }
 
 type Edge struct {
@@ -87,6 +89,7 @@ func (g *Graph) NewRuntimeNode(uuid, pluginName, nodeName string) (int, error) {
 		OutputEdges:  make(map[string][]Edge),
 		inputEdges:   make(map[string][]Edge),
 		addr:         plugin.Addr,
+		metaInfo:     node,
 	}
 
 	g.runtimeNodes[g.currentID] = runtimeNode
@@ -321,10 +324,60 @@ func (g *Graph) PutParams(id int, params map[string]any) error {
 // CheckGraphValid checks if the graph is valid.
 // Legal definition: Two start nodes cannot appear
 // in a loop of the workflow graph unless marked as a special start node.
-// TODO: use DFS to check if the graph is valid
-func (g *Graph) CheckGraphValid() error {
+func (g *Graph) CheckGraphValid() (int, error) {
 	g.log.Debug("Start checking graph validity")
 
+	var startNodeCount = 0 // Count the number of start nodes. If graph has no start node, return an error.
+	for _, runtimeNode := range g.runtimeNodes {
+		// Check if the node is a start node
+		if !runtimeNode.metaInfo.IsBegin {
+			continue // If not a start node, continue to the next node
+		}
+
+		startNodeCount++ // Count the start nodes
+
+		// Use DFS to check
+		// If there has another start node (and not a special begin node) in the loop, return an error
+		for _, edges := range runtimeNode.OutputEdges {
+			for _, edge := range edges {
+				id, err := g.dfsCheck(g.runtimeNodes[edge.ConsumerID], runtimeNode.ID)
+				if err != nil {
+					return id, err
+				}
+			}
+		}
+	}
+
+	// If no start node found, return an error
+	if startNodeCount == 0 {
+		return 0, uerr.NewError(errors.New("no start node found in the graph"))
+	}
+
 	g.log.Debug("Graph validity check completed.")
-	return nil
+	return 0, nil
+}
+
+// dfsCheck performs a depth-first search to check for loops in the graph.
+// Returns an error if a loop is found with multiple start nodes.
+func (g *Graph) dfsCheck(runtimeNode RuntimeNode, checkingNodeID int) (int, error) {
+	if runtimeNode.metaInfo.IsBegin {
+		// If is the checking node self, return nil (success)
+		if runtimeNode.ID == checkingNodeID {
+			return 0, nil
+		}
+
+		return runtimeNode.ID, uerr.NewError(errors.New("A loop contains multiple start nodes, which is not allowed"))
+	}
+
+	// Check the output edges of the node
+	for _, edges := range runtimeNode.OutputEdges {
+		for _, edge := range edges {
+			id, err := g.dfsCheck(g.runtimeNodes[edge.ConsumerID], checkingNodeID)
+			if err != nil {
+				return id, err
+			}
+		}
+	}
+
+	return 0, nil // No loop found, return nil
 }

@@ -17,9 +17,9 @@ func TestRunWorkflow(t *testing.T) {
 	params["cycle_num"] = 10
 	putParamsForTest(*e, idA, params)
 
-	err := e.RunningWorkflow()
+	id, err := e.RunningWorkflow()
 	if err != nil {
-		t.Errorf("RunningWorkflow failed: %v", err)
+		t.Errorf("RunningWorkflow failed: %v , error node id: %d", err, id)
 	}
 
 	time.Sleep(20 * time.Second)

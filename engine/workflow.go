@@ -4,13 +4,16 @@ import "time"
 
 //Handel the action of the workflow, like start, stop and so on.
 
-func (engine *Engine) RunningWorkflow() error {
+// RunningWorkflow starts the workflow by preparing all followers and running them.
+// It checks the validity of the workflow graph before starting.
+// If graph not valid, it returns the node id which is not valid and an error.
+func (engine *Engine) RunningWorkflow() (int, error) {
 	// Check if the graph is valid before starting the workflow
 	// Legal definition: Two start nodes cannot appear
 	// in a loop of the workflow graph unless marked as a special start node.
-	err := engine.graph.CheckGraphValid()
+	id, err := engine.graph.CheckGraphValid()
 	if err != nil {
-		return err
+		return id, err
 	}
 
 	// Prepare the workflow by initializing the start node
@@ -24,6 +27,7 @@ func (engine *Engine) RunningWorkflow() error {
 	for _, f := range engine.follower.followers {
 		readyChans = append(readyChans, f.PreparingFollower(errChan))
 	}
+
 	// Waiting for all followers to be ready
 	for _, readyChan := range readyChans {
 		select {
@@ -31,7 +35,7 @@ func (engine *Engine) RunningWorkflow() error {
 			continue
 		case err := <-errChan: // If it has error, will return directly
 			// FIXME: 还原机制——还原状态。需要从节点补完停止逻辑。
-			return err
+			return 0, err
 		}
 	}
 
@@ -51,10 +55,10 @@ func (engine *Engine) RunningWorkflow() error {
 			continue
 		case err := <-errChan: // If it has error, will return directly
 			//FIXME: 还原机制——还原状态。需要从节点补完停止逻辑。
-			return err
+			return 0, err
 		}
 	}
 
 	engine.Log.Info("All followers are running.")
-	return nil
+	return 0, nil
 }
